@@ -1,26 +1,269 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-border-subtle: var(--border-subtle);
+  --color-profit: var(--profit);
+  --color-loss: var(--loss);
+  --color-warning-qt: var(--warning-qt);
+  --color-accent-glow: var(--accent-glow);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* QTrades Dark Theme — single theme (no light mode in MVP) */
+:root {
+  --radius: 0.625rem;
+
+  /* Core backgrounds */
+  --background: #0A0C10;
+  --surface: #111318;
+  --surface-elevated: #181C24;
+
+  /* Foregrounds */
+  --foreground: #F0F2F5;
+
+  /* Cards & Popovers */
+  --card: #111318;
+  --card-foreground: #F0F2F5;
+  --popover: #181C24;
+  --popover-foreground: #F0F2F5;
+
+  /* Primary = Teal accent */
+  --primary: #0ECECE;
+  --primary-foreground: #0A0C10;
+
+  /* Secondary = elevated surface */
+  --secondary: #181C24;
+  --secondary-foreground: #F0F2F5;
+
+  /* Muted */
+  --muted: #181C24;
+  --muted-foreground: #7A8494;
+
+  /* Accent = same as primary (teal) */
+  --accent: #0ECECE;
+  --accent-foreground: #0A0C10;
+  --accent-glow: #0ECECE1A;
+
+  /* Danger / Destructive */
+  --destructive: #F75555;
+
+  /* Borders & Inputs */
+  --border: #1E2330;
+  --border-subtle: #252B38;
+  --input: #1E2330;
+  --ring: #0ECECE;
+
+  /* Trading-specific */
+  --profit: #0ECECE;
+  --loss: #F75555;
+  --warning-qt: #F5A623;
+
+  /* Charts */
+  --chart-1: #0ECECE;
+  --chart-2: #388BFD;
+  --chart-3: #F5A623;
+  --chart-4: #F75555;
+  --chart-5: #7A8494;
+
+  /* Sidebar */
+  --sidebar: #111318;
+  --sidebar-foreground: #F0F2F5;
+  --sidebar-primary: #0ECECE;
+  --sidebar-primary-foreground: #0A0C10;
+  --sidebar-accent: #181C24;
+  --sidebar-accent-foreground: #F0F2F5;
+  --sidebar-border: #1E2330;
+  --sidebar-ring: #0ECECE;
+}
+
+/* Dark class mirrors :root (dark-only app) */
+.dark {
+  --background: #0A0C10;
+  --surface: #111318;
+  --surface-elevated: #181C24;
+  --foreground: #F0F2F5;
+  --card: #111318;
+  --card-foreground: #F0F2F5;
+  --popover: #181C24;
+  --popover-foreground: #F0F2F5;
+  --primary: #0ECECE;
+  --primary-foreground: #0A0C10;
+  --secondary: #181C24;
+  --secondary-foreground: #F0F2F5;
+  --muted: #181C24;
+  --muted-foreground: #7A8494;
+  --accent: #0ECECE;
+  --accent-foreground: #0A0C10;
+  --accent-glow: #0ECECE1A;
+  --destructive: #F75555;
+  --border: #1E2330;
+  --border-subtle: #252B38;
+  --input: #1E2330;
+  --ring: #0ECECE;
+  --profit: #0ECECE;
+  --loss: #F75555;
+  --warning-qt: #F5A623;
+  --chart-1: #0ECECE;
+  --chart-2: #388BFD;
+  --chart-3: #F5A623;
+  --chart-4: #F75555;
+  --chart-5: #7A8494;
+  --sidebar: #111318;
+  --sidebar-foreground: #F0F2F5;
+  --sidebar-primary: #0ECECE;
+  --sidebar-primary-foreground: #0A0C10;
+  --sidebar-accent: #181C24;
+  --sidebar-accent-foreground: #F0F2F5;
+  --sidebar-border: #1E2330;
+  --sidebar-ring: #0ECECE;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #252B38;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #30384A;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Utility classes for trading colors */
+@layer utilities {
+  .text-profit { color: var(--profit); }
+  .text-loss { color: var(--loss); }
+  .text-warning-qt { color: var(--warning-qt); }
+  .bg-surface { background-color: var(--surface); }
+  .bg-surface-elevated { background-color: var(--surface-elevated); }
+  .border-subtle { border-color: var(--border-subtle); }
+
+  /* Glow effects */
+  .glow-accent {
+    box-shadow: 0 0 20px #0ECECE20, 0 0 40px #0ECECE0A;
+  }
+  .glow-accent-sm {
+    box-shadow: 0 0 10px #0ECECE18;
+  }
+
+  /* Card hover with accent border */
+  .card-hover {
+    @apply transition-all duration-200;
+  }
+  .card-hover:hover {
+    border-color: #0ECECE40;
+    box-shadow: 0 0 0 1px #0ECECE20, 0 4px 24px #0ECECE0A;
+  }
+
+  /* Monospace for trading numbers */
+  .font-trading {
+    font-family: var(--font-mono);
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Signal status colors */
+  .signal-buy {
+    @apply text-profit bg-profit/10 border border-profit/20;
+  }
+  .signal-sell {
+    @apply text-loss bg-loss/10 border border-loss/20;
+  }
+  .signal-open {
+    color: var(--warning-qt);
+    background-color: color-mix(in srgb, var(--warning-qt) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--warning-qt) 20%, transparent);
+  }
+
+  /* Shimmer loading animation */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--surface) 0%,
+      var(--surface-elevated) 50%,
+      var(--surface) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Ping for active signal dots */
+  .dot-ping {
+    position: relative;
+  }
+  .dot-ping::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: var(--warning-qt);
+    opacity: 0.4;
+    animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes ping {
+    75%, 100% { transform: scale(2); opacity: 0; }
+  }
 }
