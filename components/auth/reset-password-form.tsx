@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -22,6 +22,37 @@ export function ResetPasswordForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [sessionReady, setSessionReady] = useState(false);
+  const [sessionError, setSessionError] = useState(false);
+
+  useEffect(() => {
+    const supabase = createClient();
+
+    // Timeout: jika setelah 5 detik tidak ada event apapun, anggap link tidak valid
+    const timeout = setTimeout(() => {
+      if (!sessionReady) {
+        setSessionError(true);
+      }
+    }, 5000);
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === "PASSWORD_RECOVERY") {
+          clearTimeout(timeout);
+          setSessionReady(true);
+        } else if (event === "SIGNED_IN" && session) {
+          // User sudah punya session aktif via link — tetap set ready
+          clearTimeout(timeout);
+          setSessionReady(true);
+        }
+      }
+    );
+
+    return () => {
+      clearTimeout(timeout);
+      subscription.unsubscribe();
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {
     register,
@@ -44,6 +75,52 @@ export function ResetPasswordForm() {
 
     toast.success("Password berhasil diubah!");
     setTimeout(() => router.push("/login"), 2000);
+  }
+
+  // Loading state — menunggu konfirmasi session dari Supabase
+  if (!sessionReady && !sessionError) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="w-full max-w-md"
+      >
+        <div className="bg-surface rounded-2xl border border-border p-8 space-y-6 text-center">
+          <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground">
+            Memverifikasi link reset password...
+          </p>
+        </div>
+      </motion.div>
+    );
+  }
+
+  // Error state — link tidak valid atau sudah kedaluwarsa
+  if (sessionError) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="w-full max-w-md"
+      >
+        <div className="bg-surface rounded-2xl border border-border p-8 space-y-6 text-center">
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold text-foreground">Link Tidak Valid</h2>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Link reset password tidak valid atau sudah kedaluwarsa. Silakan minta link baru.
+            </p>
+          </div>
+          <Link
+            href="/forgot-password"
+            className="inline-block text-sm text-primary hover:text-primary/80 transition-colors underline underline-offset-4"
+          >
+            Minta link reset password baru
+          </Link>
+        </div>
+      </motion.div>
+    );
   }
 
   return (
@@ -132,7 +209,7 @@ export function ResetPasswordForm() {
 
           <Button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !sessionReady}
             className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
           >
             {isSubmitting ? (

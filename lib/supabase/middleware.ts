@@ -52,10 +52,15 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    // Check admin role dari user metadata
+    // Check admin role dari database (lebih aman daripada user_metadata)
+    const { data: profile } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", user.id)
+      .single<{ role: string }>();
+
     const isAdmin =
-      user.user_metadata?.role === "admin" ||
-      user.user_metadata?.role === "super_admin";
+      profile?.role === "admin" || profile?.role === "super_admin";
 
     if (!isAdmin) {
       const url = request.nextUrl.clone();
